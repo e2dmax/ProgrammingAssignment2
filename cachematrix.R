@@ -1,5 +1,5 @@
 ## The following functions work together to make it faster to retreive
-## the solve reuslt of a matrix if the solution is needed more than once.
+## the inverse of a matrix if the solution is needed more than once.
 ## Pass a matrix to the makeCacheMatrix and it returns a object
 ## that can then be used with the cacheSolve function.
 
