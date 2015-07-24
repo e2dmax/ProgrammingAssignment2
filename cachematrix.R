@@ -1,16 +1,16 @@
 ## The following functions work together to make it faster to retreive
 ## the solve reuslt of a matrix if the solution is needed more than once.
-## Pass a matrix to the makeCacheMatrix and it returns a special matrix
+## Pass a matrix to the makeCacheMatrix and it returns a object
 ## that can then be used with the cacheSolve function.
 
 
 ## makeCacheMatrix takes a matrix as input. It stores the input matrix 
 ## within its scope and returns a list of functions for retrieving and 
-## manipulating the matrix and its cached result.
+## manipulating the matrix and its cached inverse.
 ## $set is used to set or reset the matrix
 ## $get is used to retreive the matrix
-## $setsolve is used to store(cache) the solved matrix
-## $getsolve is used to retreive the solved matrix
+## $setsolve is used to store(cache) the inverse matrix
+## $getsolve is used to retreive the inverse matrix
 
 makeCacheMatrix <- function(x = matrix()) {
   s <- NULL
@@ -19,28 +19,28 @@ makeCacheMatrix <- function(x = matrix()) {
     s <<- NULL
   }
   get <- function() x
-  setsolve <- function(solve) s <<- solve
-  getsolve <- function() s
+  setinverse <- function(solve) s <<- solve
+  getinverse <- function() s
   list(set = set, get = get,
-       setsolve = setsolve,
-       getsolve = getsolve)
+       setinverse = setinverse,
+       getinverse = getinverse)
 }
 
 
-## cacheSolve takes the special matrix as input and first checks to see
-## if the matrix solution already exists.If it does then the cached result 
-## is retreived and returned.  Else if the solution does not already exist
-## then the matrix is solved and stored in the special matrix and then
-## returns the result.
+## cacheSolve takes the object from makeCacheMatrix as input and first 
+## checks to see if the inverse of the matrix exists. If it does then 
+## the cached inverse is retreived and returned. Else if the inverse 
+## does not already exist then the matrix is solved and the inverse is 
+## stored in the object. It then returns the inverse.
 
 cacheSolve <- function(x, ...) {
-  s <- x$getsolve()
+  s <- x$getinverse()
   if(!is.null(s)) {
     message("getting cached data")
     return(s)
   }
   data <- x$get()
   s <- solve(data, ...)
-  x$setsolve(s)
+  x$setinverse(s)
   s
 }
